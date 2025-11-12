@@ -14,18 +14,26 @@ button:hover{background:#005fa3}
 .ads{margin-top:20px}
 .ad{border:1px solid #ddd;border-radius:8px;padding:10px;margin-top:10px}
 .ad img{max-width:100%;border-radius:6px}
+.lock{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center}
 </style>
 </head>
 <body>
-<div class="container">
+
+<div class="lock" id="lock">
+  <h2>🔐 دخول لوحة الإدارة</h2>
+  <input id="pass" type="password" placeholder="ahmedosman">
+  <button onclick="login()">دخول</button>
+  <p id="err" style="color:red"></p>
+</div>
+
+<div class="container" id="panel" style="display:none">
 <h2>لوحة إدارة — الدلالة</h2>
 <p>ألصق مفتاح JSONBin الخاص بك مرة واحدة لإدارة الإعلانات.</p>
 
 <label>🔑 X-Master-Key</label>
-<input id="key" placeholder="ألصق مفتاحك هنا">
+<input id="key" placeholder="$2a$10$7cesS0lV1PuOAdhJjhxTqeAzTbimMwKcQqbHAixEgOWl/d5zeSucO">
 
 <button id="loadBtn">تحميل الإعلانات</button>
-
 <hr>
 
 <h3>➕ إضافة / تعديل إعلان</h3>
@@ -47,9 +55,32 @@ button:hover{background:#005fa3}
 </div>
 
 <script>
+// ---------------------
+// SIMPLE PASSWORD CHECK
+// ---------------------
+const PASSWORD_HASH = "4d9d1a2dc6a244d1e9bce863f8c7619e"; // Hashed password placeholder
+
+async function login(){
+  const input = document.getElementById('pass').value;
+  const hash = await digest(input);
+  if(hash === PASSWORD_HASH){
+    document.getElementById('lock').style.display="none";
+    document.getElementById('panel').style.display="block";
+  } else {
+    document.getElementById('err').textContent = "❌ كلمة المرور غير صحيحة";
+  }
+}
+
+async function digest(str){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+// ---------------------
+// AD MANAGEMENT SECTION
+// ---------------------
 const BIN_ID = "69144054ae596e708f5418a2";
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
 let apiKey = "";
 let ads = [];
 
