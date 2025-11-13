@@ -71,8 +71,8 @@
       <div id="result" class="grid" aria-live="polite"></div>
 
       <div style="margin-top:10px;display:flex;gap:8px">
-        <button id="downloadZip" disabled>تحميل ZIP</button>
-        <button id="downloadMeta" disabled>تحميل metadata.json</button>
+        
+        
       </div>
     </div>
 
@@ -92,8 +92,8 @@
   const clearBtn = document.getElementById('clear');
   const statusEl = document.getElementById('status');
   const resultEl = document.getElementById('result');
-  const downloadZipBtn = document.getElementById('downloadZip');
-  const downloadMetaBtn = document.getElementById('downloadMeta');
+  const 
+  const 
 
   function human(n){ if(n<1024) return n+" B"; if(n<1024*1024) return (n/1024).toFixed(1)+" KB"; return (n/1024/1024).toFixed(2)+" MB"; }
   function sanitizeName(n){ return n.replace(/[^a-z0-9\-\_\.؀-ۿ]/ig,'_').toLowerCase(); }
@@ -120,9 +120,9 @@
     });
   }
 
-  async function process(){
+  async function processSingle(){
     const files = filesEl.files; if(!files || files.length===0){ alert('اختر صوراً'); return; }
-    processBtn.disabled=true; statusEl.textContent='جارٍ المعالجة...'; resultEl.innerHTML=''; downloadZipBtn.disabled=true; downloadMetaBtn.disabled=true;
+    processBtn.disabled=true; statusEl.textContent='جارٍ المعالجة...'; resultEl.innerHTML='';  
     const zip = new JSZip(); const meta = [];
     const q = Math.max(50, Math.min(85, parseInt(qualityEl.value)||78))/100;
     const fmt = formatEl.value; const thumbW = parseInt(thumbWidthEl.value,10);
@@ -137,12 +137,12 @@
         const blob = await resizeToBlob(img, thumbW, fmt, q);
         const ext = fmt==='webp'? 'webp':'jpg';
         const outName = `${base}-${thumbW}.${ext}`;
-        zip.file(outName, blob);
+        // zip removed(outName, blob);
         // metadata
         const kw = keywordEl.value.trim(); const loc = locationEl.value.trim();
         const alt = kw? `${kw} في ${loc}` : base;
         const title = kw? `${kw} — ${loc}` : base;
-        meta.push({filename: outName, alt, title});
+        
         // preview
         const url = URL.createObjectURL(blob);
         const card = document.createElement('div'); card.className='item';
@@ -155,16 +155,16 @@
     }
 
     // finalize
-    zip.file('metadata.json', JSON.stringify(meta, null, 2));
+    
     const content = await zip.generateAsync({type:'blob'});
-    downloadZipBtn.disabled=false; downloadZipBtn.onclick = ()=> saveAs(content, 'optimized-images.zip');
-    downloadMetaBtn.disabled=false; downloadMetaBtn.onclick = ()=> saveAs(new Blob([JSON.stringify(meta,null,2)], {type:'application/json'}), 'metadata.json');
+     
+     
     statusEl.textContent='تم التحسين — حمّل ZIP أو metadata.';
     processBtn.disabled=false;
   }
 
   processBtn.addEventListener('click', process);
-  clearBtn.addEventListener('click', ()=>{ filesEl.value=''; resultEl.innerHTML=''; statusEl.textContent='جاهز — اختر صوراً ثم اضغط ابدأ.'; downloadZipBtn.disabled=true; downloadMetaBtn.disabled=true; });
+  clearBtn.addEventListener('click', ()=>{ filesEl.value=''; resultEl.innerHTML=''; statusEl.textContent='جاهز — اختر صوراً ثم اضغط ابدأ.';   });
 
 })();
 </script>
