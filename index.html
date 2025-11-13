@@ -3,198 +3,168 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>محسّن الصور — أداة سريعة ومحسّنة للـSEO</title>
-  <meta name="description" content="أداة تعمل داخل المتصفح لتغيير حجم الصور، تحويلها إلى WebP/JPEG، وإنشاء metadata (alt, JSON-LD) جاهزة للنشر." />
+  <title>محسّن الصور — بسيط وسريع</title>
+  <meta name="description" content="أداة محمولة في المتصفح لضغط وتغيير حجم الصور وإنشاء metadata (alt + JSON-LD) وتنزيل ZIP." />
   <style>
     :root{--accent:#0078d7;--bg:#f7f9fc;--card:#fff;--muted:#6b7280}
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Cairo,Arial; margin:0;background:var(--bg);color:#111}
-    .wrap{max-width:980px;margin:18px auto;padding:14px}
+    body{font-family:system-ui,Arial; margin:0;background:var(--bg);color:#111}
+    .wrap{max-width:900px;margin:18px auto;padding:14px}
     header{display:flex;gap:12px;align-items:center}
-    h1{margin:0;font-size:1.25rem;color:var(--accent)}
-    p.lead{margin:6px 0 18px;color:var(--muted)}
-    .card{background:var(--card);border-radius:10px;padding:14px;box-shadow:0 6px 20px rgba(3,7,18,0.04)}
-    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    label{display:flex;flex-direction:column;font-size:0.95rem;color:var(--muted)}
-    input[type=file]{padding:6px}
-    select,input[type=number],input[type=text]{padding:8px;border-radius:6px;border:1px solid #e6edf3}
-    button{background:var(--accent);color:white;border:0;padding:10px 12px;border-radius:8px;font-weight:600}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px}
+    h1{margin:0;font-size:1.1rem;color:var(--accent)}
+    .card{background:var(--card);border-radius:10px;padding:12px;box-shadow:0 6px 20px rgba(3,7,18,0.04)}
+    .row{display:flex;gap:8px;flex-wrap:wrap}
+    label{font-size:13px;color:var(--muted)}
+    input,select,button{padding:8px;border-radius:8px;border:1px solid #e6edf3}
+    button{background:var(--accent);color:#fff;border:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px}
     .item{background:#fff;padding:8px;border-radius:8px;border:1px solid #f0f4f8}
-    img.preview{width:100%;height:120px;object-fit:cover;border-radius:6px}
+    img.preview{width:100%;height:110px;object-fit:cover;border-radius:6px}
     .meta{font-size:12px;color:var(--muted);margin-top:6px}
-    .actions{display:flex;gap:8px;margin-top:8px}
-    .small{font-size:13px;padding:6px 8px}
-    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-    .settings{display:flex;gap:8px;flex-wrap:wrap}
-    @media(max-width:520px){.controls{flex-direction:column}}
+    .controls{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .status{margin-top:10px;font-size:13px;color:var(--muted)}
+    @media(max-width:520px){.row{flex-direction:column}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#0078d7"/><path d="M7 11.5L10 15l4-5 3 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#0078d7"/><path d="M7 11.5L10 15l4-5 3 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div>
-        <h1>محسّن الصور + مولّد Metadata</h1>
-        <p class="lead">سهل، سريع، يعمل بالكامل في المتصفح — اضغط، حرّر الأسماء، وانتج ملفات metadata الجاهزة للرفع.</p>
+        <h1>محسّن الصور — سهل وسريع</h1>
       </div>
     </header>
 
     <div class="card">
-      <div class="controls">
-        <label>اختر الصور (عدة صور)
+      <div class="row">
+        <label>اختر الصور
           <input id="files" type="file" accept="image/*" multiple>
         </label>
 
-        <div class="settings">
-          <label>المفتاح الرئيسي (Keyword)
-            <input id="keyword" type="text" placeholder="مثال: سيارة تويوتا">
-          </label>
+        <label>الكلمة المفتاحية
+          <input id="keyword" type="text" placeholder="مثال: سيارة تويوتا">
+        </label>
 
-          <label>الموقع (Location)
-            <input id="location" type="text" placeholder="مثال: الخرطوم">
-          </label>
+        <label>الموقع
+          <input id="location" type="text" placeholder="مثال: الخرطوم">
+        </label>
 
-          <label>تنسيق الإخراج
-            <select id="format"><option value="webp" selected>WebP</option><option value="jpeg">JPEG</option></select>
-          </label>
+        <label>حجم المصغّر
+          <select id="thumbWidth"><option value="320">320</option><option value="400">400</option></select>
+        </label>
 
-          <label>جودة (أفضل افتراضي)
-            <input id="quality" type="number" min="50" max="85" value="78">
-          </label>
+        <label>جودة (٪)
+          <input id="quality" type="number" min="50" max="85" value="78">
+        </label>
 
-          <label>توليد 3 أحجام تلقائياً
-            <input id="generateThree" type="checkbox" checked style="margin-right:8px">
-          </label>
-
-        </div>
-
-        <div style="display:flex;align-items:flex-end">
-          <button id="process">تحسين وإنشاء Metadata</button>
-        </div>
+        <label>تنسيق
+          <select id="format"><option value="webp">WebP</option><option value="jpeg">JPEG</option></select>
+        </label>
       </div>
 
+      <div class="controls">
+        <button id="process">ابدأ التحسين (مع ZIP)</button>
+        <button id="clear">مسح</button>
+      </div>
+
+      <div id="status" class="status">جاهز — اختر صوراً ثم اضغط ابدأ.</div>
       <div id="result" class="grid" aria-live="polite"></div>
 
-      <div style="margin-top:12px;display:flex;gap:8px">
-        <button id="downloadZip" class="small">تحميل ZIP (فارغ)</button>
-        <button id="downloadMeta" class="small">تحميل metadata.json</button>
-        <button id="clear" class="small" style="background:#f3f4f6;color:#111">مسح</button>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button id="downloadZip" disabled>تحميل ZIP</button>
+        <button id="downloadMeta" disabled>تحميل metadata.json</button>
       </div>
-
     </div>
 
-    <footer>
-      يعمل محلياً. الأسماء والـalt وJSON-LD تنتج تلقائياً ويمكن تحريرها قبل التنزيل.
-    </footer>
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 <script>
-(async()=>{
+(() => {
   const filesEl = document.getElementById('files');
   const keywordEl = document.getElementById('keyword');
   const locationEl = document.getElementById('location');
-  const formatEl = document.getElementById('format');
+  const thumbWidthEl = document.getElementById('thumbWidth');
   const qualityEl = document.getElementById('quality');
-  const generateThreeEl = document.getElementById('generateThree');
+  const formatEl = document.getElementById('format');
   const processBtn = document.getElementById('process');
-  const result = document.getElementById('result');
+  const clearBtn = document.getElementById('clear');
+  const statusEl = document.getElementById('status');
+  const resultEl = document.getElementById('result');
   const downloadZipBtn = document.getElementById('downloadZip');
   const downloadMetaBtn = document.getElementById('downloadMeta');
-  const clearBtn = document.getElementById('clear');
-
-  const presets = [320,640,1280];
 
   function human(n){ if(n<1024) return n+" B"; if(n<1024*1024) return (n/1024).toFixed(1)+" KB"; return (n/1024/1024).toFixed(2)+" MB"; }
   function sanitizeName(n){ return n.replace(/[^a-z0-9\-\_\.؀-ۿ]/ig,'_').toLowerCase(); }
-  function fileToImage(file){ return new Promise((resolve,reject)=>{ const url = URL.createObjectURL(file); const img = new Image(); img.onload = ()=>{ URL.revokeObjectURL(url); resolve(img); }; img.onerror = e=> reject(e); img.src = url; }); }
 
-  async function processFiles(fileList){
-    result.innerHTML=''; downloadZipBtn.textContent='تحميل ZIP (جارٍ التحضير...)'; downloadZipBtn.disabled=true; downloadMetaBtn.disabled=true; downloadMetaBtn.textContent='metadata.json (جارٍ التحضير...)';
-    const zip = new JSZip(); const metadata = [];
-    const fmt = formatEl.value; const q = Math.max(50, Math.min(85, parseInt(qualityEl.value,10)||78))/100;
-    let count=0;
-    for(const file of fileList){
-      count++;
-      const img = await fileToImage(file);
-      const nameBase = sanitizeName(file.name.replace(/\.[^.]+$/,''));
-
-      // generate sizes
-      const sizes = generateThreeEl.checked ? presets : [presets[1]];
-      for(const w of sizes){
-        const blob = await resizeToBlob(img,w,fmt,q);
-        const ext = fmt==='webp'? 'webp' : 'jpg';
-        const outName = `${nameBase}-${w}.${ext}`;
-        zip.file(outName, blob);
-      }
-
-      // generate metadata
-      const primary = keywordEl.value.trim(); const loc = locationEl.value.trim();
-      const alt = primary ? `${primary} في ${loc} — ${nameBase}` : `${nameBase}`;
-      const title = primary ? `${primary} — ${loc}` : nameBase;
-      const desc = primary ? `${primary} للبيع في ${loc}. تواصل الآن.` : `${nameBase}`;
-      const imageSample = `${nameBase}-${sizes[0]}.${fmt==='webp'?'webp':'jpg'}`;
-
-      const jsonld = {
-        "@context":"https://schema.org",
-        "@type":"Product",
-        "name": title,
-        "image": imageSample,
-        "description": desc
-      };
-
-      metadata.push({filename:imageSample, alt, title, description: desc, jsonld});
-
-      // preview card
-      const thumb = await resizeToDataURL(img,320,'image/jpeg',0.7);
-      const card = document.createElement('div'); card.className='item';
-      card.innerHTML = `<img class="preview" src="${thumb}" alt="${nameBase}"><div class="meta"><strong>${nameBase}</strong><div class="muted">الأصل ${human(file.size)}</div><div class="actions"></div></div>`;
-      const actions = card.querySelector('.actions');
-      const editBtn = document.createElement('button'); editBtn.className='small'; editBtn.textContent='تعديل meta';
-      editBtn.onclick = ()=> editMeta(nameBase);
-      const dlSample = document.createElement('button'); dlSample.className='small'; dlSample.textContent='تنزيل عينة';
-      dlSample.onclick = ()=>{
-        const sampleName = `${nameBase}-${sizes[0]}.${fmt==='webp'?'webp':'jpg'}`;
-        zip.file(sampleName).async('blob').then(b=> saveAs(b, sampleName));
-      };
-      actions.appendChild(editBtn); actions.appendChild(dlSample);
-      result.appendChild(card);
-
-      if(count % 6 === 0) await new Promise(r=>setTimeout(r,40));
-    }
-
-    // add metadata files to zip
-    zip.file('metadata.json', JSON.stringify(metadata, null, 2));
-    // csv
-    const csv = ['filename,alt,title,description'].concat(metadata.map(m=>`"${m.filename}","${m.alt.replace(/"/g,'""')}","${m.title.replace(/"/g,'""')}","${m.description.replace(/"/g,'""')}"`)).join('
-');
-    zip.file('metadata.csv', csv);
-
-    zip.generateAsync({type:'blob'}).then(content=>{
-      downloadZipBtn.disabled=false; downloadZipBtn.textContent='تحميل ZIP ('+human(content.size)+')'; downloadZipBtn.onclick = ()=> saveAs(content,'optimized-images-with-metadata.zip');
-      downloadMetaBtn.disabled=false; downloadMetaBtn.textContent='تحميل metadata.json'; downloadMetaBtn.onclick = ()=> saveAs(new Blob([JSON.stringify(metadata,null,2)],{type:'application/json'}),'metadata.json');
+  function fileToImage(file){
+    return new Promise((resolve,reject)=>{
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = ()=>{ URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = e=> reject(e);
+      img.src = url;
     });
   }
 
-  function editMeta(base){
-    const idx = Array.from(result.querySelectorAll('.item')).findIndex(card=> card.querySelector('strong').textContent===base);
-    if(idx===-1) return alert('خطأ');
-    const newAlt = prompt('نص ALT (اقصر جملة وصفية):', '');
-    if(newAlt){
-      // apply to metadata array later — for simplicity we allow manual edit before download in next iteration
-      alert('تم حفظ التعديل مؤقتاً في العرض — سيتم تطبيقه تلقائياً عند الضغط على تحسين مرة أخرى');
-    }
+  function resizeToBlob(img,w,fmt,q){
+    return new Promise(res=>{
+      const canvas = document.createElement('canvas');
+      const aspect = img.naturalHeight / img.naturalWidth;
+      const W = Math.min(w, img.naturalWidth);
+      canvas.width = W; canvas.height = Math.round(W * aspect);
+      const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      const mime = fmt==='webp'? 'image/webp' : 'image/jpeg';
+      canvas.toBlob(blob=>res(blob), mime, q);
+    });
   }
 
-  function resizeToDataURL(img,w,mime,q){ const canvas = document.createElement('canvas'); const aspect = img.naturalHeight / img.naturalWidth; const W = Math.min(w, img.naturalWidth); canvas.width = W; canvas.height = Math.round(W * aspect); const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); return canvas.toDataURL(mime,q); }
-  function resizeToBlob(img,w,fmt,q){ return new Promise(res=>{ const canvas = document.createElement('canvas'); const aspect = img.naturalHeight / img.naturalWidth; const W = Math.min(w, img.naturalWidth); canvas.width = W; canvas.height = Math.round(W * aspect); const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); const mime = fmt==='webp'? 'image/webp' : 'image/jpeg'; canvas.toBlob(blob=>res(blob), mime, q); }); }
+  async function process(){
+    const files = filesEl.files; if(!files || files.length===0){ alert('اختر صوراً'); return; }
+    processBtn.disabled=true; statusEl.textContent='جارٍ المعالجة...'; resultEl.innerHTML=''; downloadZipBtn.disabled=true; downloadMetaBtn.disabled=true;
+    const zip = new JSZip(); const meta = [];
+    const q = Math.max(50, Math.min(85, parseInt(qualityEl.value)||78))/100;
+    const fmt = formatEl.value; const thumbW = parseInt(thumbWidthEl.value,10);
 
-  processBtn.addEventListener('click', async ()=>{ const files = filesEl.files; if(!files || files.length===0){ alert('اختر الصور أولاً'); return; } processBtn.disabled=true; processBtn.textContent='جارٍ المعالجة...'; try{ await processFiles(files); }catch(err){ console.error(err); alert('خطأ: '+err.message); } processBtn.disabled=false; processBtn.textContent='تحسين وإنشاء Metadata'; });
+    // process sequentially to avoid memory issues
+    for(let i=0;i<files.length;i++){
+      const file = files[i];
+      try{
+        const img = await fileToImage(file);
+        const base = sanitizeName(file.name.replace(/\.[^.]+$/,''));
+        // generate thumb only (to save time & size)
+        const blob = await resizeToBlob(img, thumbW, fmt, q);
+        const ext = fmt==='webp'? 'webp':'jpg';
+        const outName = `${base}-${thumbW}.${ext}`;
+        zip.file(outName, blob);
+        // metadata
+        const kw = keywordEl.value.trim(); const loc = locationEl.value.trim();
+        const alt = kw? `${kw} في ${loc}` : base;
+        const title = kw? `${kw} — ${loc}` : base;
+        meta.push({filename: outName, alt, title});
+        // preview
+        const url = URL.createObjectURL(blob);
+        const card = document.createElement('div'); card.className='item';
+        card.innerHTML = `<img class="preview" src="${url}" alt="${alt}"><div class="meta"><strong>${outName}</strong><div>${human(blob.size)}</div></div>`;
+        resultEl.appendChild(card);
+        // yield
+        await new Promise(r=>setTimeout(r,60));
+      }catch(e){ console.error(e); }
+      statusEl.textContent = `معالجة ${i+1} من ${files.length}`;
+    }
 
-  clearBtn.addEventListener('click', ()=>{ filesEl.value=''; result.innerHTML=''; downloadZipBtn.textContent='تحميل ZIP (فارغ)'; downloadZipBtn.disabled=true; downloadMetaBtn.textContent='metadata.json'; downloadMetaBtn.disabled=true; }); downloadZipBtn.disabled=true; downloadMetaBtn.disabled=true;
+    // finalize
+    zip.file('metadata.json', JSON.stringify(meta, null, 2));
+    const content = await zip.generateAsync({type:'blob'});
+    downloadZipBtn.disabled=false; downloadZipBtn.onclick = ()=> saveAs(content, 'optimized-images.zip');
+    downloadMetaBtn.disabled=false; downloadMetaBtn.onclick = ()=> saveAs(new Blob([JSON.stringify(meta,null,2)], {type:'application/json'}), 'metadata.json');
+    statusEl.textContent='تم التحسين — حمّل ZIP أو metadata.';
+    processBtn.disabled=false;
+  }
+
+  processBtn.addEventListener('click', process);
+  clearBtn.addEventListener('click', ()=>{ filesEl.value=''; resultEl.innerHTML=''; statusEl.textContent='جاهز — اختر صوراً ثم اضغط ابدأ.'; downloadZipBtn.disabled=true; downloadMetaBtn.disabled=true; });
 
 })();
 </script>
