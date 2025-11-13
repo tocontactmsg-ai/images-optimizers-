@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>محسّن الصور — أداة واجهة فقط + تحسين SEO</title>
+  <meta name="description" content="أداة مجانية تعمل بالكامل في المتصفح لتحويل الصور إلى WebP/JPEG، تغيير الأبعاد، إزالة البيانات وتهيئة ملفات مُحسّنة للنشر — مع نصائح SEO لرفع ترتيب موقعك." />
+  <meta name="keywords" content="compress images, webp, image optimizer, SEO, Arabic, Azure Static Web Apps" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    :root{--accent:#0078d7;--bg:#f7f9fc;--card:#fff;--muted:#6b7280}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Cairo,Arial; margin:0;background:var(--bg);color:#111}
+    .wrap{max-width:980px;margin:18px auto;padding:14px}
+    header{display:flex;gap:12px;align-items:center}
+    h1{margin:0;font-size:1.25rem;color:var(--accent)}
+    p.lead{margin:6px 0 18px;color:var(--muted)}
+    .card{background:var(--card);border-radius:10px;padding:14px;box-shadow:0 6px 20px rgba(3,7,18,0.04)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    label{display:flex;flex-direction:column;font-size:0.95rem;color:var(--muted)}
+    input[type=file]{padding:6px}
+    select,input[type=number]{padding:6px;border-radius:6px;border:1px solid #e6edf3}
+    button{background:var(--accent);color:white;border:0;padding:10px 12px;border-radius:8px;font-weight:600}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px}
+    .item{background:#fff;padding:8px;border-radius:8px;border:1px solid #f0f4f8}
+    img.preview{width:100%;height:120px;object-fit:cover;border-radius:6px}
+    .meta{font-size:12px;color:var(--muted);margin-top:6px}
+    .actions{display:flex;gap:8px;margin-top:8px}
+    .small{font-size:13px;padding:6px 8px}
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    .seo{margin-top:12px;padding:12px;background:#fcfeff;border-radius:8px;border:1px solid #eef6ff}
+    .rtl-note{font-size:13px;color:var(--muted);margin-top:8px}
+    @media(max-width:520px){.controls{flex-direction:column}}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "محسّن الصور",
+    "url": "https://eldelala.azurestaticapps.net/",
+    "description": "أداة مجانية تعمل في المتصفح لضغط وتغيير حجم الصور قبل الرفع، مع نصائح SEO"  
+  }
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#0078d7"/><path d="M7 11.5L10 15l4-5 3 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <h1>محسّن الصور — بدون خادم</h1>
+        <p class="lead">قم بتغيير الحجم، التحويل إلى WebP/JPEG، إزالة بيانات EXIF، وحزم الصور المحسنة للتنزيل — كل ذلك في متصفحك، مجاناً. <br> (العربية/English)</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="controls">
+        <label>اختر الصور (متعدد)
+          <input id="files" type="file" accept="image/*" multiple>
+        </label>
+
+        <label>أحجام مُسبقة (اختر لتوليد 3 أحجام تلقائياً)
+          <select id="preset" title="سيولد thumb/medium/large تلقائيا">
+            <option value="thumb">Thumb (320,640,1280)</option>
+            <option value="medium" selected>Medium (480,800,1600)</option>
+            <option value="large">Large (640,1024,2048)</option>
+          </select>
+        </label>
+
+        <label>توليد 3 أحجام تلقائياً
+          <input id="generateThree" type="checkbox" checked style="margin-left:8px">
+        </label>
+
+        <label>تنسيق الإخراج
+          <select id="format">
+            <option value="webp" selected>WebP (موصى به)</option>
+            <option value="jpeg">JPEG (fallback)</option>
+          </select>
+        </label>
+
+        <label>الجودة (%)
+          <input id="quality" type="number" min="30" max="100" value="78">
+        </label>
+
+        <div style="display:flex;align-items:flex-end">
+          <button id="process">تحسين وتحضير ZIP</button>
+        </div>
+      </div>
+
+      <div class="info rtl-note">لا حاجة لتخزين الصور على خادم — كل المعالجة تتم محلياً في المتصفح. يُنصح بمعالجة دفعات صغيرة (50-200) لتجنب محدودية الذاكرة في المتصفحات.</div>
+
+      <div id="result" class="grid" aria-live="polite" style="margin-top:12px"></div>
+
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button id="downloadZip" class="small">تحميل ZIP (فارغ)</button>
+        <button id="clear" class="small" style="background:#f3f4f6;color:#111">مسح</button>
+      </div>
+
+      <div class="seo">
+        <h3 style="margin-top:0">نصائح SEO سريعة لرفع ترتيب موقعك</h3>
+        <ol>
+          <li>استخدم عنوان صفحة فريد وواضح: &lt;title&gt; — يحتوي على كلمات مفتاحية مرتبطة (مثال: "إعلانات الدلالة — سيارات مستعملة في الخرطوم").</li>
+          <li>أضف &lt;meta name=\"description\"&gt; واضح وجذاب (120-160 حرف).</li>
+          <li>أضف &lt;h1&gt; و &lt;h2&gt; وصفية في كل صفحة والالتزام بترويسات منطقية.</li>
+          <li>خصص نص بديل للصور (alt) يتضمن كلمات رئيسية قصيرة ووصفياً.</li>
+          <li>ارسل ملف sitemap.xml إلى Google Search Console وBing Webmaster.</li>
+          <li>اجعل الموقع متوافقاً مع الجوال: استجابة كاملة ووقت تحميل < 2s.</li>
+          <li>استعمل بيانات منظمة (JSON-LD) للإعلانات/أحداث لزيادة ظهور النتائج الغنية.</li>
+        </ol>
+        <p style="margin:6px 0 0;color:var(--muted)">بعد معالجة الصور، قم برفع النسخ المحسنة إلى موقعك (نفس الأسماء أو مسار /images/) وسيتم استخدام الملفات الصغيرة بنفس الوسوم &lt;img&gt; دون تغيير الشيفرة.</p>
+      </div>
+
+    </div>
+
+    <footer>
+      مجاني، يعمل محلياً. بعد التحميل، استخدم "Download ZIP" ثم ارفع الملفات إلى موقعك. لمزيد من المساعدة في إنشاء sitemap أو إضافة JSON-LD سأقوم بذلك لك.
+    </footer>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<script>
+(async()=>{
+  const filesEl = document.getElementById('files');
+  const presetEl = document.getElementById('preset');
+  const generateThreeEl = document.getElementById('generateThree');
+  const formatEl = document.getElementById('format');
+  const qualityEl = document.getElementById('quality');
+  const processBtn = document.getElementById('process');
+  const result = document.getElementById('result');
+  const downloadZipBtn = document.getElementById('downloadZip');
+  const clearBtn = document.getElementById('clear');
+
+  const presets = {
+    thumb:[320,640,1280],
+    medium:[480,800,1600],
+    large:[640,1024,2048]
+  };
+
+  function human(n){ if(n<1024) return n+" B"; if(n<1024*1024) return (n/1024).toFixed(1)+" KB"; return (n/1024/1024).toFixed(2)+" MB"; }
+  function sanitizeName(n){ return n.replace(/[^a-z0-9\-\_\.؀-ۿ]/ig,'_').toLowerCase(); }
+
+  function fileToImage(file){ return new Promise((resolve,reject)=>{ const url = URL.createObjectURL(file); const img = new Image(); img.onload = ()=>{ URL.revokeObjectURL(url); resolve(img); }; img.onerror = e=> reject(e); img.src = url; }); }
+
+  async function processFiles(fileList){
+    result.innerHTML=''; downloadZipBtn.textContent='تحميل ZIP (جارٍ التحضير...)';
+    const zip = new JSZip(); let count=0;
+    const sizes = presets[presetEl.value];
+    for(const file of fileList){
+      count++;
+      const img = await fileToImage(file);
+      const nameBase = sanitizeName(file.name.replace(/\.[^.]+$/,''));
+      const q = Math.max(30, Math.min(100, parseInt(qualityEl.value,10)||78))/100;
+      if(generateThreeEl.checked){
+        for(const w of sizes){
+          const blob = await resizeToBlob(img,w,formatEl.value,q);
+          const ext = formatEl.value==='webp'? 'webp' : 'jpg';
+          const outName = `${nameBase}-${w}.${ext}`;
+          zip.file(outName, blob);
+        }
+      } else {
+        const targetW = sizes[1];
+        const blob = await resizeToBlob(img,targetW,formatEl.value,q);
+        const ext = formatEl.value==='webp'? 'webp' : 'jpg';
+        const outName = `${nameBase}-${targetW}.${ext}`;
+        zip.file(outName, blob);
+      }
+
+      // preview card
+      const thumb = await resizeToDataURL(img,320,'image/jpeg',0.7);
+      const card = document.createElement('div'); card.className='item';
+      card.innerHTML = `<img class="preview" src="${thumb}" alt="${nameBase}"><div class="meta"><strong>${nameBase}</strong><div class="muted">الأصل ${human(file.size)}</div><div class="actions"></div></div>`;
+      const actions = card.querySelector('.actions');
+      const dlBtn = document.createElement('button'); dlBtn.className='small'; dlBtn.textContent='تنزيل عينة';
+      dlBtn.onclick = ()=>{
+        // create single sample blob for download (first generated size)
+        const sampleName = sanitizeName(file.name.replace(/\.[^.]+$/,'')) + '-' + (generateThreeEl.checked? sizes[0] : sizes[1]) + (formatEl.value==='webp'?'.webp':'.jpg');
+        // find blob from zip
+        zip.file(sampleName).async('blob').then(b=> saveAs(b, sampleName));
+      };
+      actions.appendChild(dlBtn);
+      result.appendChild(card);
+
+      if(count % 6 === 0) await new Promise(r=>setTimeout(r,40));
+    }
+    // finalize zip
+    zip.generateAsync({type:'blob'}).then(content=>{
+      downloadZipBtn.disabled=false; downloadZipBtn.textContent='تحميل ZIP ('+human(content.size)+')'; downloadZipBtn.onclick = ()=> saveAs(content,'optimized-images.zip');
+    });
+  }
+
+  function resizeToDataURL(img,w,mime,q){ const canvas = document.createElement('canvas'); const aspect = img.naturalHeight / img.naturalWidth; const W = Math.min(w, img.naturalWidth); canvas.width = W; canvas.height = Math.round(W * aspect); const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); return canvas.toDataURL(mime,q); }
+
+  function resizeToBlob(img,w,fmt,q){ return new Promise(res=>{
+    const canvas = document.createElement('canvas'); const aspect = img.naturalHeight / img.naturalWidth; const W = Math.min(w, img.naturalWidth); canvas.width = W; canvas.height = Math.round(W * aspect); const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); const mime = fmt==='webp'? 'image/webp' : 'image/jpeg'; canvas.toBlob(blob=>res(blob), mime, q); }); }
+
+  processBtn.addEventListener('click', async ()=>{
+    const files = filesEl.files; if(!files || files.length===0){ alert('اختر الصور أولاً'); return; }
+    processBtn.disabled=true; processBtn.textContent='جارٍ المعالجة...'; try{ await processFiles(files); }catch(err){ console.error(err); alert('خطأ: '+err.message); } processBtn.disabled=false; processBtn.textContent='تحسين وتحضير ZIP';
+  });
+
+  clearBtn.addEventListener('click', ()=>{ filesEl.value=''; result.innerHTML=''; downloadZipBtn.textContent='تحميل ZIP (فارغ)'; downloadZipBtn.disabled=true; }); downloadZipBtn.disabled=true;
+
+})();
+</script>
+</body>
+</html>
